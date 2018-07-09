@@ -1,0 +1,41 @@
+{
+  "name": "kate-client-app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://romannep.github.io/g-itsm/",
+  "dependencies": {
+    "@material-ui/core": "1.2.1",
+    "@material-ui/icons": "1.1.0",
+    "classnames": "^2.2.5",
+    "history": "^4.7.2",
+    "material-kit-react": "file:../material-kit-react",
+    "moment": "^2.22.2",
+    "react": "^16.2.0",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-datetime": "2.14.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-react": "^7.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
+  }
+}
