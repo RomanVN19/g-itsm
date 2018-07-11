@@ -34,6 +34,13 @@ export default class Item extends Form {
           title: 'Business process',
           getOptions: this.getBPs,
         },
+        {
+          id: 'taskNumber',
+          type: Elements.INPUT,
+          title: 'Current task number',
+          format: val => Number(val.replace(/\D/g, '')),
+          value: 0,
+        },
       ],
     });
     if (params.id && params.id !== 'new') {

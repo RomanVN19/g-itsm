@@ -48,6 +48,12 @@ export default class Item extends Form {
               cols: 3,
               elements: [
                 {
+                  id: 'taskNumber',
+                  type: Elements.INPUT,
+                  title: 'Task number',
+                  format: val => Number(val.replace(/\D/g, '')),
+                },
+                {
                   id: 'project',
                   type: Elements.SELECT,
                   title: 'Project',
@@ -74,6 +80,16 @@ export default class Item extends Form {
       entity: 'Task',
       ...this.getValues(),
     };
+    if (!data.taskNumber && data.project) {
+      const { response: project } = await Form.request(`${this.app.baseUrl}/${data.project._id}`);
+      project.taskNumber += 1;
+      await await Form.request(
+        `${this.app.baseUrl}/${data.project._id}`,
+        { method: 'PUT', body: JSON.stringify(project) },
+      );
+      data.taskNumber = project.taskNumber;
+      this.content.taskNumber.value = data.taskNumber;
+    }
     const result = await Form.request(`${this.app.baseUrl}/${this._id ? this._id : ''}`, {
       method: this._id ? 'PUT' : 'POST',
       body: JSON.stringify({

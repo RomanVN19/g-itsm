@@ -30,6 +30,7 @@ export default class List extends Form {
           type: Elements.TABLE,
           rowClick: this.editRow,
           columns: [
+            { title: 'Number', dataPath: 'taskNumber' },
             { title: 'Name', dataPath: 'title' },
           ],
           value: [],
