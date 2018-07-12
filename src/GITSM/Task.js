@@ -1,4 +1,6 @@
-import { Form, Elements } from 'kate-client';
+import { Form, Elements, getIn } from 'kate-client';
+
+import { BusinessProcessItem } from 'kp-business-processes';
 
 export default class Item extends Form {
   static path = '/task/:id';
@@ -6,6 +8,9 @@ export default class Item extends Form {
 
   constructor(sys, params) {
     super(sys);
+
+    this.bp = new BusinessProcessItem({ parentForm: this });
+
     this.init({
       actions: [
         {
@@ -63,6 +68,7 @@ export default class Item extends Form {
             },
           ],
         },
+        ...this.bp.elements,
       ],
     });
     if (params.id && params.id !== 'new') {
@@ -110,6 +116,7 @@ export default class Item extends Form {
       this._id = data._id;
       this._rev = data._rev;
       this.setValues(data);
+      this.bp.update(getIn(data, 'project.bp._id'));
     }
   }
 }

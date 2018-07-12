@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
-import { KateFormProvider } from 'kate-form';
+import { KateFormProvider, getIn } from 'kate-form';
 import { connectors, Elements } from 'kate-form-material-kit-react';
 
 import configureStore from './store';
@@ -40,4 +40,5 @@ export {
   App,
   Form,
   Elements,
+  getIn,
 };

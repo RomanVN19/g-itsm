@@ -22,6 +22,7 @@ export default class Form {
     this.getValues = params.getValues;
     this.setValues = params.setValues;
     this.app = params.app;
+    this.content = createContent(this[getData], this[setData]);
   }
 
   init = (form) => {
@@ -39,8 +40,7 @@ export default class Form {
       ],
       title: this[title],
     });
-    this.data = form.data || [];
-    this.content = createContent(this[getData], this[setData]);
+    // this.data = form.data || [];
   }
   // [createContent] = () => {
   //   const { [getData]: getFormData, [createElement]: createFormElement } = this;
