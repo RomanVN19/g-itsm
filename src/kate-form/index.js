@@ -16,7 +16,7 @@ const createElement = (getContent, path, setFormData, prefix = '') => new Proxy(
 });
 
 const findPath = (data, id, sub) => {
-  if (data.id === id) return '';
+  if (!data || data.id === id) return '';
   if (data[sub]) {
     const subPath = findPath(data[sub], id, sub);
     if (subPath) return `${sub}.${subPath}`;

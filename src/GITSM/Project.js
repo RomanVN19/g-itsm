@@ -1,5 +1,7 @@
 import { Form, Elements } from 'kate-client';
 
+import ProjectList from './ProjectList';
+
 export default class Item extends Form {
   static path = '/project/:id';
   static title = 'Project';
@@ -8,6 +10,12 @@ export default class Item extends Form {
     super(sys);
     this.init({
       actions: [
+        {
+          id: '0',
+          type: Elements.BUTTON,
+          title: 'OK',
+          onClick: this.ok,
+        },
         {
           id: '1',
           type: Elements.BUTTON,
@@ -19,6 +27,12 @@ export default class Item extends Form {
           type: Elements.BUTTON,
           title: 'Load',
           onClick: this.load,
+        },
+        {
+          id: '3',
+          type: Elements.BUTTON,
+          title: 'Close',
+          onClick: this.close,
         },
       ],
       elements: [
@@ -53,7 +67,7 @@ export default class Item extends Form {
     const result = await Form.request(`${this.app.baseUrl}/_design/BusinessProcess/_view/list`);
     return result.response.rows.map(row => row.value);
   }
-  save = async () => {
+  save = async (close) => {
     const data = {
       entity: 'Project',
       ...this.getValues(),
@@ -79,5 +93,12 @@ export default class Item extends Form {
       this._rev = data._rev;
       this.setValues(data);
     }
+  }
+  close = () => {
+    this.app.open(ProjectList);
+  }
+  ok = async () => {
+    await this.save();
+    this.close();
   }
 }

@@ -3,7 +3,7 @@ const setFormParams = Symbol('setFormparams');
 const appPath = Symbol('path');
 
 export default class App {
-  open = (form, params) => {
+  open = (form, params = {}) => {
     const paramsNames = Object.keys(params);
     const internalParams = {};
     let { path } = form;

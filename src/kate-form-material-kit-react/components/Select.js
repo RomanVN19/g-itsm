@@ -117,7 +117,7 @@ class Select extends Component {
   handleClose = () => this.setState({ menuOpened: false });
   handleSwitch = async () => {
     const { getOptions } = this.props;
-    if (getOptions) {
+    if (getOptions && !this.state.menuOpened) {
       this.setState({
         menuOpened: !this.state.menuOpened,
         options: await getOptions(),

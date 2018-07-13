@@ -1,4 +1,5 @@
 import { Form, Elements } from 'kate-client';
+import BusinessProcessList from './BusinessProcessList';
 
 export default class Item extends Form {
   static path = '/business-process/:id';
@@ -8,6 +9,12 @@ export default class Item extends Form {
     super(sys);
     this.init({
       actions: [
+        {
+          id: '0',
+          type: Elements.BUTTON,
+          title: 'OK',
+          onClick: this.ok,
+        },
         {
           id: '1',
           type: Elements.BUTTON,
@@ -19,6 +26,12 @@ export default class Item extends Form {
           type: Elements.BUTTON,
           title: 'Load',
           onClick: this.load,
+        },
+        {
+          id: '3',
+          type: Elements.BUTTON,
+          title: 'Close',
+          onClick: this.close,
         },
       ],
       elements: [
@@ -41,14 +54,19 @@ export default class Item extends Form {
           getOptions: this.getSteps,
         },
         {
-          type: Elements.BUTTON,
-          title: 'Add step',
-          onClick: this.addStep,
+          type: Elements.LABEL,
+          title: 'Steps',
+          tag: 'h3',
         },
         {
           id: 'steps',
           type: Elements.GROUP,
           elements: [],
+        },
+        {
+          type: Elements.BUTTON,
+          title: 'Add step',
+          onClick: this.addStep,
         },
       ],
     });
@@ -83,6 +101,11 @@ export default class Item extends Form {
               type: Elements.SELECT,
               getOptions: this.getSteps,
             },
+            {
+              title: 'Action title',
+              dataPath: 'actionTitle',
+              type: Elements.INPUT,
+            },
           ],
           value: step.nextSteps || [],
         },
@@ -98,7 +121,7 @@ export default class Item extends Form {
   getSteps = () => this.content.steps.elements
     .map((item, index) => ({ index, title: item.elements[0].value }));
 
-  save = async () => {
+  save = async (close) => {
     const data = {
       entity: 'BusinessProcess',
       title: this.content.title.value,
@@ -135,5 +158,12 @@ export default class Item extends Form {
       data.steps.forEach(step => this.addStepElement(steps, step));
       this.content.steps.elements = steps;
     }
+  }
+  close = () => {
+    this.app.open(BusinessProcessList);
+  }
+  ok = async () => {
+    await this.save();
+    this.close();
   }
 }

@@ -1,7 +1,7 @@
 import { Form, Elements } from 'kate-client';
 import Item from './Task';
 
-export default class List extends Form {
+export default class TasksList extends Form {
   static title = 'Tasks';
   static path = '/task';
 
@@ -19,11 +19,13 @@ export default class List extends Form {
       ],
       elements: [
         {
-          id: 'project',
+          id: 'projectFilter',
           type: Elements.SELECT,
           title: 'Project filter',
           getOptions: this.getProjects,
           onChange: this.filterByProject,
+          // keep current filter in static var
+          value: TasksList.projectFilter,
         },
         {
           id: 'list',
@@ -32,22 +34,25 @@ export default class List extends Form {
           columns: [
             { title: 'Number', dataPath: 'taskNumber' },
             { title: 'Name', dataPath: 'title' },
+            { title: 'Step', dataPath: 'step.title' },
           ],
           value: [],
         },
       ],
     });
-    this.load();
+    this.load(TasksList.projectFilter);
   }
   filterByProject = (project) => {
     this.load(project);
+    // keep current filter in static var
+    TasksList.projectFilter = project;
   }
-  getProjects = async () => {
-    const result = await Form.request(`${this.app.baseUrl}/_design/Project/_view/list`);
+  getProjects = async (searchText) => {
+    const result = await Form.request(`${this.app.baseUrl}/_design/Project/_view/list?startkey="${searchText || ''}"`);
     return result.response.rows.map(row => row.value);
   }
   newItem = () => {
-    this.app.open(Item, { id: 'new' });
+    this.app.open(Item, { id: 'new', project: this.content.projectFilter.value });
   }
   editRow = (row) => {
     this.app.open(Item, { id: row._id });

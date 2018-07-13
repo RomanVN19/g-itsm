@@ -22,6 +22,9 @@ class KateClientForm extends Component {
       app,
     }, params);
   }
+  componentDidUpdate() {
+    if (this.FORM.afterUpdate) this.FORM.afterUpdate();
+  }
   componentWillUnmount() {
     this.APP.clearFormParams(this.props.Form);
   }

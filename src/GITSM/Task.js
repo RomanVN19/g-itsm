@@ -2,6 +2,8 @@ import { Form, Elements, getIn } from 'kate-client';
 
 import { BusinessProcessItem } from 'kp-business-processes';
 
+import TaskList from './TaskList';
+
 export default class Item extends Form {
   static path = '/task/:id';
   static title = 'Task';
@@ -14,6 +16,12 @@ export default class Item extends Form {
     this.init({
       actions: [
         {
+          id: '0',
+          type: Elements.BUTTON,
+          title: 'OK',
+          onClick: this.ok,
+        },
+        {
           id: '1',
           type: Elements.BUTTON,
           title: 'Save',
@@ -24,6 +32,12 @@ export default class Item extends Form {
           type: Elements.BUTTON,
           title: 'Load',
           onClick: this.load,
+        },
+        {
+          id: '3',
+          type: Elements.BUTTON,
+          title: 'Close',
+          onClick: this.close,
         },
       ],
       elements: [
@@ -63,6 +77,7 @@ export default class Item extends Form {
                   type: Elements.SELECT,
                   title: 'Project',
                   getOptions: this.getProjects,
+                  value: params.project,
                 },
               ],
             },
@@ -117,6 +132,20 @@ export default class Item extends Form {
       this._rev = data._rev;
       this.setValues(data);
       this.bp.update(getIn(data, 'project.bp._id'));
+    }
+  }
+  close = () => {
+    this.app.open(TaskList);
+  }
+  ok = async () => {
+    await this.save();
+    this.close();
+  }
+  afterUpdate = () => {
+    const project = this.content.project.value;
+    if (project && project.bp) {
+      // new project with project preset
+      this.bp.update(project.bp._id);
     }
   }
 }

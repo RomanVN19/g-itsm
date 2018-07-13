@@ -31,7 +31,7 @@ export default class Item {
       nextSteps.forEach((item) => {
         actions.push({
           type: Elements.BUTTON,
-          title: item.step.title,
+          title: item.actionTitle || item.step.title,
           onClick: () => this.setStep(item.step),
         });
       });
