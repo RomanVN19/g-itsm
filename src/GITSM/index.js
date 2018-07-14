@@ -13,7 +13,7 @@ import logo from './logo.svg';
 
 
 export default class KateApp extends App {
-  static title = 'Gaika ITSM';
+  static title = 'G-ITSM';
   static logo = logo;
   static path = '/g-itsm';
 
