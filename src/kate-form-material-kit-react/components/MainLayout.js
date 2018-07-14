@@ -103,7 +103,7 @@ class MainLayout extends Component {
   switchDrawer = () => this.setState({ drawerOpen: !this.state.drawerOpen })
 
   render() {
-    const { routes, menu, classes, location, title, logo } = this.props;
+    const { routes, menu, classes, location, title, titlePath, logo } = this.props;
     const { drawerOpen } = this.state;
     return (
       <Fragment>
@@ -119,7 +119,7 @@ class MainLayout extends Component {
             autoHide
           >
             <List className={classes.list}>
-              <NavLink to="/">
+              <NavLink to={titlePath}>
                 <ListItem
                   button
                   className={cx(classes.listItem, {

@@ -10,6 +10,8 @@ import Card from 'material-kit-react/dist/components/Card/Card';
 import CardHeader from 'material-kit-react/dist/components/Card/CardHeader';
 import CardBody from 'material-kit-react/dist/components/Card/CardBody';
 
+import NavPills from 'material-kit-react/dist/components/NavPills/NavPills';
+
 import { primaryColor } from 'material-kit-react/dist/assets/jss/material-kit-react';
 import { Select, DateInput, CustomSwitch, TablePlain, TableEditable } from './components';
 
@@ -31,6 +33,7 @@ const Elements = {
 
   CARD_ACTIONS: 'cardActionsConnector',
   CARD: 'cardConnector',
+  TABS: 'tabsConnector',
 };
 
 
@@ -61,7 +64,7 @@ const labelConnector = ({ title, setData, path, tag, ...props }) => {
 const inputConnector = (allProps) => {
   const {
     title, value, onChange, setData, path,
-    dataPath, format, disabled, rows,
+    dataPath, format, disabled, rows, rowsMax,
     ...props
   } = allProps;
   const change = (e) => {
@@ -83,8 +86,65 @@ const inputConnector = (allProps) => {
         onChange: change,
         multiline: rows && true,
         rows,
+        rowsMax,
         disabled,
       }}
+      {...props}
+    />
+  );
+};
+
+const switchConnector = (allProps) => {
+  const { onChange, setData, path, dataPath, ...props } = allProps;
+  const change = (e) => {
+    setData('value', e.target.checked);
+    if (onChange) onChange(e.target.checked, allProps);
+  };
+  return (
+    <CustomSwitch
+      onChange={change}
+      {...props}
+    />
+  );
+};
+
+const dateConnector = (allProps) => {
+  const { title, value, onChange, setData, path, dataPath, ...props } = allProps;
+  const change = (val) => {
+    setData('value', val);
+    if (onChange) onChange(val, allProps);
+  };
+  return (
+    <DateInput
+      labelText={title}
+      formControlProps={{
+        fullWidth: true,
+      }}
+      inputProps={{
+        value: value || '',
+        onChange: change,
+      }}
+      {...props}
+    />
+  );
+};
+
+const selectConnector = (allProps) => {
+  const { title, value, onChange, options, setData, path,
+    dataPath, number, ...props } = allProps;
+  const change = (val) => {
+    setData('value', val);
+    if (onChange) onChange(val, allProps);
+  };
+  return (
+    <Select
+      labelText={title}
+      options={options}
+      formControlProps={{
+        fullWidth: true,
+      }}
+      value={value || {}}
+      onChange={change}
       {...props}
     />
   );
@@ -176,62 +236,19 @@ const tableEditableConnector = ({ columns, value, path, title, setData, rows, ro
   />
 );
 
-const switchConnector = (allProps) => {
-  const { onChange, setData, path, dataPath, ...props } = allProps;
-  const change = (e) => {
-    setData('value', e.target.checked);
-    if (onChange) onChange(e.target.checked, allProps);
-  };
-  return (
-    <CustomSwitch
-      onChange={change}
-      {...props}
-    />
-  );
-};
 
-const dateConnector = (allProps) => {
-  const { title, value, onChange, setData, path, dataPath, ...props } = allProps;
-  const change = (val) => {
-    setData('value', val);
-    if (onChange) onChange(val, allProps);
-  };
-  return (
-    <DateInput
-      labelText={title}
-      formControlProps={{
-        fullWidth: true,
-      }}
-      inputProps={{
-        value: value || '',
-        onChange: change,
-      }}
-      {...props}
-    />
-  );
-};
-
-const selectConnector = (allProps) => {
-  const { title, value, onChange, options, setData, path,
-    dataPath, number, ...props } = allProps;
-  const change = (val) => {
-    setData('value', val);
-    if (onChange) onChange(val, allProps);
-  };
-  return (
-    <Select
-      labelText={title}
-      options={options}
-      formControlProps={{
-        fullWidth: true,
-      }}
-      value={value || {}}
-      onChange={change}
-      {...props}
-    />
-  );
-};
-
+const tabsConnector = ({ path, elements }) => (
+  <NavPills
+    color="primary"
+    tabs={elements.map((item, index) => ({
+      tabButton: item.title,
+      tabIcon: item.icon,
+      tabContent: (
+        <KateForm path={`${path}.elements.${index}.elements`} />
+      ),
+    }))}
+  />
+);
 
 const connectors = {
   buttonConnector,
@@ -250,6 +267,7 @@ const connectors = {
 
   cardConnector,
   cardActionsConnector,
+  tabsConnector,
 };
 
 export {

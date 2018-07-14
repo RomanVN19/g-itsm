@@ -15,6 +15,7 @@ class KateComponent extends Component {
       path: App.path,
     });
     const path = match.path === '/' ? '' : match.path;
+    this.path = match.path;
     const routes = this.APP.forms.map(item => ({
       path: `${path}${item.path}`,
       form: item,
@@ -59,7 +60,14 @@ class KateComponent extends Component {
     const { app, ...rest } = this.props;
     const { routes, menu } = this.state;
     return (
-      <MainLayout routes={routes} menu={menu} title={app.title} logo={app.logo} {...rest} />
+      <MainLayout
+        routes={routes}
+        menu={menu}
+        titlePath={this.path}
+        title={app.title}
+        logo={app.logo}
+        {...rest}
+      />
     );
   }
 }

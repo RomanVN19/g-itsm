@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Form, Elements, getIn } from 'kate-client';
 
 import { BusinessProcessItem } from 'kp-business-processes';
@@ -11,7 +12,36 @@ export default class Item extends Form {
   constructor(sys, params) {
     super(sys);
 
-    this.bp = new BusinessProcessItem({ parentForm: this });
+    this.bp = new BusinessProcessItem({ parentForm: this, setStepAction: this.setStep });
+
+    const descriptionTabElements = [
+      {
+        id: 'description',
+        type: Elements.INPUT,
+        title: 'Description',
+        rows: 5,
+        rowsMax: 100,
+      },
+    ];
+
+    const historyTabElements = [
+      {
+        id: 'history',
+        type: Elements.TABLE,
+        title: 'Hello, world',
+        columns: [
+          {
+            title: 'Date',
+            dataPath: 'date',
+            format: val => moment(val).format('DD.MM.YYYY HH:mm'),
+          },
+          {
+            title: 'Action',
+            dataPath: 'action',
+          },
+        ],
+      },
+    ];
 
     this.init({
       actions: [
@@ -55,10 +85,18 @@ export default class Item extends Form {
                   value: '',
                 },
                 {
-                  id: 'description',
-                  type: Elements.INPUT,
-                  title: 'Description',
-                  rows: 5,
+                  id: 'tabs',
+                  type: Elements.TABS,
+                  elements: [
+                    {
+                      title: 'Description',
+                      elements: descriptionTabElements,
+                    },
+                    {
+                      title: 'History',
+                      elements: historyTabElements,
+                    },
+                  ],
                 },
               ],
             },
@@ -141,11 +179,20 @@ export default class Item extends Form {
     await this.save();
     this.close();
   }
+  // predefined func
   afterUpdate = () => {
     const project = this.content.project.value;
     if (project && project.bp) {
       // new project with project preset
       this.bp.update(project.bp._id);
     }
+  }
+  setStep = (step) => {
+    const history = (this.content.history.value || []).slice();
+    history.push({
+      action: `Step set to ${step.title}`,
+      date: new Date(),
+    });
+    this.content.history.value = history;
   }
 }
