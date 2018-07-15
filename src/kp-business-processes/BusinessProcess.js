@@ -121,7 +121,7 @@ export default class Item extends Form {
   getSteps = () => this.content.steps.elements
     .map((item, index) => ({ index, title: item.elements[0].value }));
 
-  save = async (close) => {
+  save = async () => {
     const data = {
       entity: 'BusinessProcess',
       title: this.content.title.value,

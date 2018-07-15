@@ -22,6 +22,9 @@ class KateClientForm extends Component {
       app,
     }, params);
   }
+  shouldComponentUpdate(nextProps) {
+    return this.props.data !== nextProps.data;
+  }
   componentDidUpdate() {
     if (this.FORM.afterUpdate) this.FORM.afterUpdate();
   }

@@ -6,18 +6,15 @@ import {
   Select,
 } from './components';
 
+
 import {
   Elements,
   connectors,
 } from './connectors';
 
-import OptionsProvider from './provider';
-
 export {
   Elements,
   connectors,
-
-  OptionsProvider,
 
   MainLayout,
   Select,

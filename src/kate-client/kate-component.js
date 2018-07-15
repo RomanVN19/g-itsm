@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { MainLayout } from 'kate-form-material-kit-react';
 
 import KateClientForm from './kate-client-form';
 
+
 class KateComponent extends Component {
   state = {
+    alerts: [],
   };
   componentWillMount() {
     const { app: App, match } = this.props;
@@ -13,6 +15,7 @@ class KateComponent extends Component {
       history: this.props.history,
       setFormParams: this.setFormParams,
       path: App.path,
+      showAlert: this.showAlert,
     });
     const path = match.path === '/' ? '' : match.path;
     this.path = match.path;
@@ -38,6 +41,11 @@ class KateComponent extends Component {
       routes,
       menu,
     });
+    this.showAlert({
+      type: 'info',
+      title: 'Platform initialized',
+      timeout: 3,
+    });
   }
   setFormParams = (form, params) => {
     const { routes } = this.state;
@@ -56,18 +64,34 @@ class KateComponent extends Component {
     }
     this.setState({ routes });
   }
+  showAlert = (alert) => {
+    const { alerts } = this.state;
+    // eslint-disable-next-line no-param-reassign
+    alert.timestamp = new Date().getTime() + ((alert.timeout || 2) * 1000);
+    alerts.push(alert);
+    this.setState({ alerts });
+    setTimeout(() => {
+      const { alerts: alertsToCheck } = this.state;
+      const now = new Date().getTime();
+      const newAlerts = alertsToCheck.filter(item => item.timestamp > now);
+      this.setState({ alerts: newAlerts });
+    }, ((alert.timeout || 2) * 1000) + 100);
+  }
   render() {
-    const { app, ...rest } = this.props;
-    const { routes, menu } = this.state;
+    const { app, classes, ...rest } = this.props;
+    const { routes, menu, alerts } = this.state;
     return (
-      <MainLayout
-        routes={routes}
-        menu={menu}
-        titlePath={this.path}
-        title={app.title}
-        logo={app.logo}
-        {...rest}
-      />
+      <Fragment>
+        <MainLayout
+          routes={routes}
+          menu={menu}
+          titlePath={this.path}
+          title={app.title}
+          logo={app.logo}
+          alerts={alerts}
+          {...rest}
+        />
+      </Fragment>
     );
   }
 }

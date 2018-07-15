@@ -29,5 +29,6 @@ export default class App {
     this[history] = params.history;
     this[setFormParams] = params.setFormParams;
     this[appPath] = params.path;
+    this.showAlert = params.showAlert;
   }
 }

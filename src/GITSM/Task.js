@@ -160,6 +160,7 @@ export default class Item extends Form {
     if (result.response) {
       this._id = result.response.id;
       this._rev = result.response.rev;
+      this.app.showAlert({ type: 'success', title: 'Saved!' });
     }
   }
   load = async () => {
@@ -181,6 +182,7 @@ export default class Item extends Form {
   }
   // predefined func
   afterUpdate = () => {
+    console.log('after update call');
     const project = this.content.project.value;
     if (project && project.bp) {
       // new project with project preset

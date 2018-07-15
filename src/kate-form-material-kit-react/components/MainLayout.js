@@ -1,7 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 
 import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -9,6 +10,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import MenuIcon from '@material-ui/icons/Menu';
 import AppIcon from '@material-ui/icons/Apps';
+
+import InfoOutline from "@material-ui/icons/InfoOutline";
+import Check from "@material-ui/icons/Check";
+import Warning from "@material-ui/icons/Warning";
+import Snackbar from 'material-kit-react/dist/components/Snackbar/SnackbarContent';
 
 import { withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
@@ -28,12 +34,12 @@ const DocIcon = () => (
 const drawerWidth = 250;
 const collapsedDrawerWidth = 56;
 const styles = {
-  main: {
-    marginLeft: collapsedDrawerWidth,
-    padding: 20,
+  root: {
+    display: 'flex',
   },
-  mainShifted: {
-    marginLeft: drawerWidth,
+  main: {
+    padding: 20,
+    flex: 1,
   },
   drawerPaper: {
     width: collapsedDrawerWidth,
@@ -80,6 +86,12 @@ const styles = {
   listItemCollapsed: {
     margin: '10px 0 0',
   },
+  snackbar: {
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    zIndex: 1300,
+  },
 };
 
 
@@ -100,76 +112,122 @@ class MainLayout extends Component {
   state = {
     drawerOpen: true,
   }
+  getAlertIcon = (type) => {
+    switch (type) {
+      case 'danger':
+        return Warning;
+      case 'success':
+        return Check;
+      default:
+        return InfoOutline;
+    }
+  }
   switchDrawer = () => this.setState({ drawerOpen: !this.state.drawerOpen })
-
   render() {
-    const { routes, menu, classes, location, title, titlePath, logo } = this.props;
+    const {
+      routes, menu, classes, location, title,
+      titlePath, logo, alerts,
+    } = this.props;
     const { drawerOpen } = this.state;
-    return (
-      <Fragment>
-        <Drawer
-          variant="permanent"
-          anchor="left"
-          classes={{
-            paper: cx(classes.drawerPaper, { [classes.drawerOpen]: drawerOpen }),
-          }}
-        >
-          <Scrollbar
-            renderThumbVertical={renderThumb}
-            autoHide
+    const drawerContent = (
+      <List className={classes.list}>
+        <NavLink to={titlePath}>
+          <ListItem
+            button
+            className={cx(classes.listItem, {
+              [classes.listItemCollapsed]: !drawerOpen,
+            })}
           >
-            <List className={classes.list}>
-              <NavLink to={titlePath}>
-                <ListItem
-                  button
-                  className={cx(classes.listItem, {
-                    [classes.listItemCollapsed]: !drawerOpen,
-                  })}
-                >
-                  <ListItemIcon className={classes.icon}>
-                    { logo ? <img src={logo} alt="logo" /> : <AppIcon />}
-                  </ListItemIcon>
-                  { drawerOpen ?
-                    <ListItemText primary={title} />
-                    : null }
-                </ListItem>
-              </NavLink>
+            <ListItemIcon className={classes.icon}>
+              { logo ? <img src={logo} alt="logo" /> : <AppIcon />}
+            </ListItemIcon>
+            { drawerOpen ?
+              <ListItemText primary={title} />
+              : null }
+          </ListItem>
+        </NavLink>
 
+        <ListItem
+          button
+          onClick={this.switchDrawer}
+          className={cx(classes.listItem, { [classes.listItemCollapsed]: !drawerOpen })}
+        >
+          <ListItemIcon className={classes.icon}><MenuIcon /></ListItemIcon>
+          { drawerOpen ? <ListItemText primary="Collapse" /> : null }
+        </ListItem>
+        {
+          (menu || routes).map(route => (
+            <NavLink to={route.path} key={route.path}>
               <ListItem
                 button
-                onClick={this.switchDrawer}
-                className={cx(classes.listItem, { [classes.listItemCollapsed]: !drawerOpen })}
+                className={cx(classes.listItem, {
+                  [classes.listItemCollapsed]: !drawerOpen,
+                  [classes.currentItem]: location.pathname.indexOf(route.path) === 0,
+                })}
               >
-                <ListItemIcon className={classes.icon}><MenuIcon /></ListItemIcon>
-                { drawerOpen ? <ListItemText primary="Collapse" /> : null }
+                <ListItemIcon>{ route.icon ? <route.icon /> : <DocIcon />}</ListItemIcon>
+                { drawerOpen ?
+                  <ListItemText primary={route.title} />
+                  : null }
               </ListItem>
-              {
-                (menu || routes).map(route => (
-                  <NavLink to={route.path} key={route.path}>
-                    <ListItem
-                      button
-                      className={cx(classes.listItem, {
-                        [classes.listItemCollapsed]: !drawerOpen,
-                        [classes.currentItem]: location.pathname.indexOf(route.path) === 0,
-                      })}
-                    >
-                      <ListItemIcon>{ route.icon ? <route.icon /> : <DocIcon />}</ListItemIcon>
-                      { drawerOpen ?
-                        <ListItemText primary={route.title} />
-                        : null }
-                    </ListItem>
-                  </NavLink>
+            </NavLink>
 
-                ))
-              }
-              <ListItem>
-                <ListItemText primary="" />
-              </ListItem>
+          ))
+        }
+        <ListItem>
+          <ListItemText primary="" />
+        </ListItem>
 
-            </List>
-          </Scrollbar>
-        </Drawer>
-        <main className={cx(classes.main, { [classes.mainShifted]: drawerOpen })}>
+      </List>
+    );
+    return (
+      <div className={classes.root}>
+        <Hidden smDown>
+          <Drawer
+            variant="permanent"
+            anchor="left"
+            classes={{
+              docked: cx(classes.drawerPaper, { [classes.drawerOpen]: drawerOpen }),
+              paper: cx(classes.drawerPaper, { [classes.drawerOpen]: drawerOpen }),
+            }}
+          >
+            <Scrollbar
+              renderThumbVertical={renderThumb}
+              autoHide
+            >
+              {drawerContent}
+            </Scrollbar>
+          </Drawer>
+        </Hidden>
+        <Hidden mdUp>
+          {
+            drawerOpen ? (
+              <Drawer
+                variant="temporary"
+                anchor="left"
+                classes={{
+                  docked: cx(classes.drawerPaper, { [classes.drawerOpen]: drawerOpen }),
+                  paper: cx(classes.drawerPaper, { [classes.drawerOpen]: drawerOpen }),
+                }}
+                open
+              >
+                {drawerContent}
+              </Drawer>
+            ) : (
+              <Drawer
+                variant="permanent"
+                anchor="left"
+                classes={{
+                  docked: cx(classes.drawerPaper, { [classes.drawerOpen]: drawerOpen }),
+                  paper: cx(classes.drawerPaper, { [classes.drawerOpen]: drawerOpen }),
+                }}
+              >
+                {drawerContent}
+              </Drawer>
+            )
+          }
+        </Hidden>
+        <main className={classes.main}>
           <Switch>
             {
               // eslint-disable-next-line no-confusing-arrow
@@ -188,7 +246,24 @@ class MainLayout extends Component {
             }
           </Switch>
         </main>
-      </Fragment>
+        <div className={classes.snackbar}>
+          {
+            alerts.map(alert => (
+              <Snackbar
+                key={`${alert.title}${alert.desciption}`}
+                message={
+                  <span>
+                    <b>{alert.title}</b> {alert.desciption}
+                  </span>
+                }
+                close
+                color={alert.type || 'info'}
+                icon={this.getAlertIcon(alert.type)}
+              />
+            ))
+          }
+        </div>
+      </div>
     );
   }
 }
