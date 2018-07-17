@@ -64,7 +64,7 @@ export default class Item extends Form {
   }
 
   getBPs = async () => {
-    const result = await Form.request(`${this.app.baseUrl}/_design/BusinessProcess/_view/list`);
+    const result = await this.app.request(`${this.app.baseUrl}/_design/BusinessProcess/_view/list`);
     return result.response.rows.map(row => row.value);
   }
   save = async (close) => {
@@ -72,7 +72,7 @@ export default class Item extends Form {
       entity: 'Project',
       ...this.getValues(),
     };
-    const result = await Form.request(`${this.app.baseUrl}/${this._id ? this._id : ''}`, {
+    const result = await this.app.request(`${this.app.baseUrl}/${this._id ? this._id : ''}`, {
       method: this._id ? 'PUT' : 'POST',
       body: JSON.stringify({
         _id: this._id,
@@ -86,7 +86,7 @@ export default class Item extends Form {
     }
   }
   load = async () => {
-    const result = await Form.request(`${this.app.baseUrl}/${this._id}`);
+    const result = await this.app.request(`${this.app.baseUrl}/${this._id}`);
     if (result.response) {
       const data = result.response;
       this._id = data._id;

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { Form, Elements, getIn } from 'kate-client';
 
-import { BusinessProcessItem } from 'kp-business-processes';
+import { BusinessProcessItem } from 'business-processes';
 
 import TaskList from './TaskList';
 
@@ -131,7 +131,7 @@ export default class Item extends Form {
   }
 
   getProjects = async () => {
-    const result = await Form.request(`${this.app.baseUrl}/_design/Project/_view/list`);
+    const result = await this.app.request(`${this.app.baseUrl}/_design/Project/_view/list`);
     return result.response.rows.map(row => row.value);
   }
   save = async () => {
@@ -140,16 +140,16 @@ export default class Item extends Form {
       ...this.getValues(),
     };
     if (!data.taskNumber && data.project) {
-      const { response: project } = await Form.request(`${this.app.baseUrl}/${data.project._id}`);
+      const { response: project } = await this.app.request(`${this.app.baseUrl}/${data.project._id}`);
       project.taskNumber += 1;
-      await await Form.request(
+      await await this.app.request(
         `${this.app.baseUrl}/${data.project._id}`,
         { method: 'PUT', body: JSON.stringify(project) },
       );
       data.taskNumber = project.taskNumber;
       this.content.taskNumber.value = data.taskNumber;
     }
-    const result = await Form.request(`${this.app.baseUrl}/${this._id ? this._id : ''}`, {
+    const result = await this.app.request(`${this.app.baseUrl}/${this._id ? this._id : ''}`, {
       method: this._id ? 'PUT' : 'POST',
       body: JSON.stringify({
         _id: this._id,
@@ -164,7 +164,7 @@ export default class Item extends Form {
     }
   }
   load = async () => {
-    const result = await Form.request(`${this.app.baseUrl}/${this._id}`);
+    const result = await this.app.request(`${this.app.baseUrl}/${this._id}`);
     if (result.response) {
       const data = result.response;
       this._id = data._id;
@@ -182,7 +182,6 @@ export default class Item extends Form {
   }
   // predefined func
   afterUpdate = () => {
-    console.log('after update call');
     const project = this.content.project.value;
     if (project && project.bp) {
       // new project with project preset

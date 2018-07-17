@@ -31,4 +31,18 @@ export default class App {
     this[appPath] = params.path;
     this.showAlert = params.showAlert;
   }
+  // eslint-disable-next-line class-methods-use-this
+  async request(url, params) {
+    return fetch(url, {
+      headers: {
+        'content-type': 'application/json',
+      },
+      ...params,
+    })
+      .then(response => response
+        .json()
+        .then(json => ({ response: json }))
+        .catch(() => ({ response })))
+      .catch(error => ({ error }));
+  }
 }

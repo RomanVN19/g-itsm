@@ -48,7 +48,7 @@ export default class TasksList extends Form {
     TasksList.projectFilter = project;
   }
   getProjects = async (searchText) => {
-    const result = await Form.request(`${this.app.baseUrl}/_design/Project/_view/list?startkey="${searchText || ''}"`);
+    const result = await this.app.request(`${this.app.baseUrl}/_design/Project/_view/list?startkey="${searchText || ''}"`);
     return result.response.rows.map(row => row.value);
   }
   newItem = () => {
@@ -62,7 +62,7 @@ export default class TasksList extends Form {
     if (project) {
       filter = `startkey=["${project._id}"]&endkey=["${project._id}", {}]`;
     }
-    const result = await Form.request(`${this.app.baseUrl}/_design/Task/_view/list?${filter}`);
+    const result = await this.app.request(`${this.app.baseUrl}/_design/Task/_view/list?${filter}`);
     this.content.list.value = result.response.rows.map(row => row.value);
   }
 }

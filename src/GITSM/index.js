@@ -1,7 +1,7 @@
 import { App } from 'kate-client';
 
-import BPList from 'kp-business-processes/BusinessProcessList';
-import BP from 'kp-business-processes/BusinessProcess';
+import BPList from 'business-processes/BusinessProcessList';
+import BP from 'business-processes/BusinessProcess';
 
 import Task from './Task';
 import TaskList from './TaskList';

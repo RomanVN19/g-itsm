@@ -1,4 +1,4 @@
-import { Form, Elements } from 'kate-client';
+import { Elements } from 'kate-client';
 
 export default class Item {
   constructor(params) {
@@ -22,6 +22,7 @@ export default class Item {
       },
     ];
     this.form = params.parentForm;
+    this.app = this.form.app;
     this.content = this.form.content;
     this.setStepAction = params.setStepAction;
   }
@@ -40,7 +41,7 @@ export default class Item {
     }
   }
   update = async (bpId) => {
-    const { response: bp } = await Form.request(`${this.form.app.baseUrl}/${bpId}`);
+    const { response: bp } = await this.app.request(`${this.form.app.baseUrl}/${bpId}`);
     if (bp) {
       this.bp = bp;
       if (!this.content.bp_currentStep.value) {

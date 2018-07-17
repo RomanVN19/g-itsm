@@ -38,7 +38,7 @@ export default class List extends Form {
     this.app.open(Item, { id: row._id });
   }
   load = async () => {
-    const result = await Form.request(`${this.app.baseUrl}/_design/BusinessProcess/_view/list`);
+    const result = await this.app.request(`${this.app.baseUrl}/_design/BusinessProcess/_view/list`);
     this.content.list.value = result.response.rows.map(row => row.value);
   }
 }
