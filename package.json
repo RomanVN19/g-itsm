@@ -1,0 +1,28 @@
+{
+  "name": "kate-client-app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://romannep.github.io/g-itsm/",
+  "dependencies": {
+    "kate-client": "file:../kate-client",
+    "moment": "^2.22.2",
+    "react-scripts": "^1.1.4"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-react": "^7.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
+  }
+}
