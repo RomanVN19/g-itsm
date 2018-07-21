@@ -4,21 +4,9 @@
   "private": true,
   "homepage": "https://romannep.github.io/g-itsm/",
   "dependencies": {
-    "@material-ui/core": "1.2.1",
-    "@material-ui/icons": "1.1.0",
-    "classnames": "^2.2.5",
-    "history": "^4.7.2",
-    "material-kit-react": "file:../material-kit-react",
+    "kate-client": "file:../kate-client",
     "moment": "^2.22.2",
-    "react": "^16.2.0",
-    "react-custom-scrollbars": "^4.2.1",
-    "react-datetime": "2.14.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
-    "redux": "^4.0.0",
-    "redux-logger": "^3.0.6"
+    "react-scripts": "^1.1.4"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

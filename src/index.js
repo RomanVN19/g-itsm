@@ -1,5 +1,5 @@
 import KateClient from 'kate-client';
-import GITSM from './GITSM';
+import GITSM from './App';
 
 import 'moment/locale/ru';
 
