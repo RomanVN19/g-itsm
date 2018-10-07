@@ -181,7 +181,7 @@ export default class Item extends Form {
     this.close();
   }
   // predefined func
-  afterUpdate = () => {
+  afterInit = () => {
     const project = this.content.project.value;
     if (project && project.bp) {
       // new project with project preset
