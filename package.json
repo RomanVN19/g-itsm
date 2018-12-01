@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://romannep.github.io/g-itsm/",
   "dependencies": {
-    "kate-client": "^0.1.8",
+    "kate-client": "0.1.8",
     "moment": "^2.22.2"
   },
   "devDependencies": {
