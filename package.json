@@ -1,10 +1,10 @@
 {
   "name": "kate-client-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": "https://romannep.github.io/g-itsm/",
   "dependencies": {
-    "kate-client": "^0.1.8",
+    "kate-client": "^0.3.3",
     "moment": "^2.22.2"
   },
   "devDependencies": {

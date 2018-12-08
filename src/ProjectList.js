@@ -8,27 +8,25 @@ export default class List extends Form {
   constructor(sys) {
     super(sys);
 
-    this.init({
-      actions: [
-        {
-          id: 'new',
-          type: Elements.BUTTON,
-          title: 'New',
-          onClick: this.newItem,
-        },
-      ],
-      elements: [
-        {
-          id: 'list',
-          type: Elements.TABLE,
-          rowClick: this.editRow,
-          columns: [
-            { title: 'Name', dataPath: 'title' },
-          ],
-          value: [],
-        },
-      ],
-    });
+    this.actions = [
+      {
+        id: 'new',
+        type: Elements.BUTTON,
+        title: 'New',
+        onClick: this.newItem,
+      },
+    ];
+    this.elements = [
+      {
+        id: 'list',
+        type: Elements.TABLE,
+        rowClick: this.editRow,
+        columns: [
+          { title: 'Name', dataPath: 'title' },
+        ],
+        value: [],
+      },
+    ];
     this.load();
   }
   newItem = () => {
@@ -38,7 +36,7 @@ export default class List extends Form {
     this.app.open(Item, { id: row._id });
   }
   load = async () => {
-    const result = await this.app.request(`${this.app.baseUrl}/_design/Project/_view/list`);
+    const result = await this.app.request(`${this.app.baseUrl}/_design/Project/_view/list`, {});
     this.content.list.value = result.response.rows.map(row => row.value);
   }
 }

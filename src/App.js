@@ -20,26 +20,27 @@ export default class KateApp extends App {
   constructor(sys) {
     super(sys);
 
-    this.forms = [
+    this.forms = {
       Task,
       TaskList,
       Project,
       ProjectList,
       BP,
       BPList,
-    ];
+    };
+
     this.menu = [
       {
         title: 'Tasks',
-        form: TaskList,
+        form: 'TaskList',
       },
       {
         title: 'Projects',
-        form: ProjectList,
+        form: 'ProjectList',
       },
       {
         title: 'BP',
-        form: BPList,
+        form: 'BPList',
       },
     ];
     // this.baseUrl = 'http://localhost:5984/gitsm';

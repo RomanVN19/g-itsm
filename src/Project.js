@@ -6,57 +6,55 @@ export default class Item extends Form {
   static path = '/project/:id';
   static title = 'Project';
 
-  constructor(sys, params) {
-    super(sys);
-    this.init({
-      actions: [
-        {
-          id: '0',
-          type: Elements.BUTTON,
-          title: 'OK',
-          onClick: this.ok,
-        },
-        {
-          id: '1',
-          type: Elements.BUTTON,
-          title: 'Save',
-          onClick: this.save,
-        },
-        {
-          id: '2',
-          type: Elements.BUTTON,
-          title: 'Load',
-          onClick: this.load,
-        },
-        {
-          id: '3',
-          type: Elements.BUTTON,
-          title: 'Close',
-          onClick: this.close,
-        },
-      ],
-      elements: [
-        {
-          id: 'title',
-          type: Elements.INPUT,
-          title: 'Title',
-          value: '',
-        },
-        {
-          id: 'bp',
-          type: Elements.SELECT,
-          title: 'Business process',
-          getOptions: this.getBPs,
-        },
-        {
-          id: 'taskNumber',
-          type: Elements.INPUT,
-          title: 'Current task number',
-          format: val => Number(val.replace(/\D/g, '')),
-          value: 0,
-        },
-      ],
-    });
+  constructor({ sys, params }) {
+    super({ sys, params });
+    this.actions = [
+      {
+        id: '0',
+        type: Elements.BUTTON,
+        title: 'OK',
+        onClick: this.ok,
+      },
+      {
+        id: '1',
+        type: Elements.BUTTON,
+        title: 'Save',
+        onClick: this.save,
+      },
+      {
+        id: '2',
+        type: Elements.BUTTON,
+        title: 'Load',
+        onClick: this.load,
+      },
+      {
+        id: '3',
+        type: Elements.BUTTON,
+        title: 'Close',
+        onClick: this.close,
+      },
+    ];
+    this.elements = [
+      {
+        id: 'title',
+        type: Elements.INPUT,
+        title: 'Title',
+        value: '',
+      },
+      {
+        id: 'bp',
+        type: Elements.SELECT,
+        title: 'Business process',
+        getOptions: this.getBPs,
+      },
+      {
+        id: 'taskNumber',
+        type: Elements.INPUT,
+        title: 'Current task number',
+        format: val => Number(val.replace(/\D/g, '')),
+        value: 0,
+      },
+    ];
     if (params.id && params.id !== 'new') {
       this._id = params.id;
       this.load();
@@ -64,7 +62,7 @@ export default class Item extends Form {
   }
 
   getBPs = async () => {
-    const result = await this.app.request(`${this.app.baseUrl}/_design/BusinessProcess/_view/list`);
+    const result = await this.app.request(`${this.app.baseUrl}/_design/BusinessProcess/_view/list`, {});
     return result.response.rows.map(row => row.value);
   }
   save = async (close) => {
@@ -86,7 +84,7 @@ export default class Item extends Form {
     }
   }
   load = async () => {
-    const result = await this.app.request(`${this.app.baseUrl}/${this._id}`);
+    const result = await this.app.request(`${this.app.baseUrl}/${this._id}`, {});
     if (result.response) {
       const data = result.response;
       this._id = data._id;

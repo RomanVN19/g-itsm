@@ -41,7 +41,7 @@ export default class Item {
     }
   }
   update = async (bpId) => {
-    const { response: bp } = await this.app.request(`${this.form.app.baseUrl}/${bpId}`);
+    const { response: bp } = await this.app.request(`${this.form.app.baseUrl}/${bpId}`, {});
     if (bp) {
       this.bp = bp;
       if (!this.content.bp_currentStep.value) {

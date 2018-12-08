@@ -148,7 +148,7 @@ export default class Item extends Form {
     }
   }
   load = async () => {
-    const result = await this.app.request(`${this.app.baseUrl}/${this._id}`);
+    const result = await this.app.request(`${this.app.baseUrl}/${this._id}`, {});
     if (result.response) {
       const data = result.response;
       this._id = data._id;
